@@ -17,7 +17,7 @@ export default function Home() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [loadingFrame, setLoadingFrame] = useState(0);
   const [showAppWindows, setShowAppWindows] = useState(false);
-  const [terminalMinimized, setTerminalMinimized] = useState(false);
+  const [terminalMinimized, setTerminalMinimized] = useState(true); // Start with terminal hidden
   const [cursorInput, setCursorInput] = useState('');
   const [cursorMessages, setCursorMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
   const [browserScreenshot, setBrowserScreenshot] = useState('faire-screenshot.png');
@@ -25,9 +25,12 @@ export default function Home() {
   const [copySuccess, setCopySuccess] = useState(false);
   const [sandboxCreated, setSandboxCreated] = useState(false);
   const [showBrowser, setShowBrowser] = useState(false);
+  const [spotlightOpen, setSpotlightOpen] = useState(false);
+  const [spotlightQuery, setSpotlightQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const cursorInputRef = useRef<HTMLTextAreaElement>(null);
+  const spotlightInputRef = useRef<HTMLInputElement>(null);
 
   const projectTypeOptions = ['Starting something new', 'Continuing on something'];
   const experienceTypeOptions = ['Brand experience', 'Retail experience', 'Logged-out experience'];
@@ -43,6 +46,13 @@ export default function Home() {
       inputRef.current?.focus();
     }
   }, [workflowStep]);
+
+  // Focus Spotlight input when it opens
+  useEffect(() => {
+    if (spotlightOpen) {
+      setTimeout(() => spotlightInputRef.current?.focus(), 100);
+    }
+  }, [spotlightOpen]);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -234,7 +244,10 @@ export default function Home() {
               <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
             </svg>
           </div>
-          <div className="flex items-center gap-1">
+          <div
+            className="flex items-center gap-1 cursor-pointer hover:bg-white/10 px-2 py-1 rounded"
+            onClick={() => setSpotlightOpen(true)}
+          >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
             </svg>
@@ -258,13 +271,15 @@ export default function Home() {
             setSelectedIndex(0);
             setLoadingFrame(0);
             setShowAppWindows(false);
-            setTerminalMinimized(false);
+            setTerminalMinimized(true);
             setCursorMessages([]);
             setBrowserScreenshot('faire-screenshot.png');
             setShowShareUrl(false);
             setCopySuccess(false);
             setSandboxCreated(false);
             setShowBrowser(false);
+            setSpotlightOpen(false);
+            setSpotlightQuery('');
           }}
         >
           <svg className="w-16 h-16" viewBox="0 0 64 64" fill="currentColor">
@@ -283,6 +298,8 @@ export default function Home() {
             setWorkflowStep('idle');
             setShowBrowser(false);
             setSandboxCreated(false);
+            setSpotlightOpen(false);
+            setSpotlightQuery('');
           }}
         >
           <svg className="w-16 h-16" viewBox="0 0 64 64" fill="currentColor">
@@ -295,7 +312,7 @@ export default function Home() {
 
       {/* Terminal Window - Centered and Floating */}
       {!terminalMinimized && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl px-8">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl px-8 transition-opacity duration-500 opacity-0 animate-fadeIn">
           <div className="bg-[#292929]/75 backdrop-blur-md rounded-lg shadow-2xl overflow-hidden">
             {/* Title Bar */}
             <div className="bg-[#323232]/75 backdrop-blur-md px-4 py-2.5 flex items-center border-b border-[#1e1e1e]">
@@ -807,6 +824,71 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Spotlight Search Overlay */}
+      {spotlightOpen && (
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center pt-48 transition-opacity duration-300">
+          <div className="w-full max-w-2xl mx-4 animate-fadeIn">
+            {/* Search Box */}
+            <div className="bg-white/95 backdrop-blur-md rounded-xl shadow-2xl overflow-hidden transition-all duration-300">
+              {/* Search Input */}
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  ref={spotlightInputRef}
+                  type="text"
+                  value={spotlightQuery}
+                  onChange={(e) => setSpotlightQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      setSpotlightOpen(false);
+                      setSpotlightQuery('');
+                    } else if (e.key === 'Enter' && spotlightQuery.toLowerCase().includes('terminal')) {
+                      setSpotlightOpen(false);
+                      setTimeout(() => {
+                        setSpotlightQuery('');
+                        setTerminalMinimized(false);
+                      }, 300);
+                    }
+                  }}
+                  placeholder="Spotlight Search"
+                  className="flex-1 bg-transparent outline-none text-gray-800 text-lg placeholder-gray-400"
+                  autoComplete="off"
+                />
+              </div>
+
+              {/* Search Results */}
+              {spotlightQuery.toLowerCase().includes('terminal') && (
+                <div className="p-2">
+                  <div
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg bg-blue-500 text-white cursor-pointer hover:bg-blue-600"
+                    onClick={() => {
+                      setSpotlightOpen(false);
+                      setTimeout(() => {
+                        setSpotlightQuery('');
+                        setTerminalMinimized(false);
+                      }, 300);
+                    }}
+                  >
+                    {/* Terminal Icon */}
+                    <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-semibold">Terminal</div>
+                      <div className="text-sm text-white/70">Utilities</div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
