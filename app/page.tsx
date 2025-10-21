@@ -21,6 +21,10 @@ export default function Home() {
   const [cursorInput, setCursorInput] = useState('');
   const [cursorMessages, setCursorMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
   const [browserScreenshot, setBrowserScreenshot] = useState('faire-screenshot.png');
+  const [showShareUrl, setShowShareUrl] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
+  const [sandboxCreated, setSandboxCreated] = useState(false);
+  const [showBrowser, setShowBrowser] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const cursorInputRef = useRef<HTMLTextAreaElement>(null);
@@ -32,6 +36,13 @@ export default function Home() {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // Keep focus on input when workflow step changes
+  useEffect(() => {
+    if (workflowStep === 'project-type' || workflowStep === 'experience-type') {
+      inputRef.current?.focus();
+    }
+  }, [workflowStep]);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -108,11 +119,17 @@ export default function Home() {
           ...prev,
           { type: 'output', content: '✓ Setup complete. Your environment is ready.' },
           { type: 'output', content: '' },
-          { type: 'output', content: 'You should see both a Cursor window and browser window pop up.' },
-          { type: 'output', content: 'Click the yellow button to minimize this window.' },
+          { type: 'output', content: 'Opening Cursor...' },
           { type: 'output', content: '' },
         ]);
         setWorkflowStep('idle');
+
+        // Automatically minimize terminal and show Cursor after a few seconds
+        setTimeout(() => {
+          setTerminalMinimized(true);
+          setShowAppWindows(true);
+          setShowBrowser(false);
+        }, 2000);
       }, 5000);
     }
   };
@@ -181,6 +198,16 @@ export default function Home() {
     }
   };
 
+  const handleCopyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText('https://vibe.faire.com/intrater-102125');
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
   return (
     <div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 relative">
       {/* macOS Menu Bar */}
@@ -218,7 +245,7 @@ export default function Home() {
 
       {/* Desktop Icons */}
       <div className="absolute top-16 right-8 space-y-4">
-        {/* Macintosh HD - Reset Everything */}
+        {/* Documents Folder - Reset Everything */}
         <div
           className="flex flex-col items-center gap-2 text-white cursor-pointer hover:bg-white/20 p-2 rounded group z-50 relative"
           onClick={() => {
@@ -234,28 +261,17 @@ export default function Home() {
             setTerminalMinimized(false);
             setCursorMessages([]);
             setBrowserScreenshot('faire-screenshot.png');
+            setShowShareUrl(false);
+            setCopySuccess(false);
+            setSandboxCreated(false);
+            setShowBrowser(false);
           }}
         >
-          <div className="relative">
-            {/* Hard Drive Body */}
-            <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none">
-              {/* Main drive shape */}
-              <rect x="8" y="16" width="48" height="36" rx="4" fill="#E8E8E8" />
-              <rect x="8" y="16" width="48" height="8" rx="4" fill="#F5F5F5" />
-              {/* Drive details */}
-              <circle cx="14" cy="20" r="1.5" fill="#4CAF50" />
-              <rect x="18" y="19" width="12" height="2" rx="1" fill="#BDBDBD" />
-              {/* Bottom shadow */}
-              <ellipse cx="32" cy="52" rx="20" ry="2" fill="#000000" opacity="0.1" />
-            </svg>
-            {/* Finder icon overlay */}
-            <div className="absolute bottom-1 right-0 w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-600 rounded flex items-center justify-center shadow-lg">
-              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z" />
-              </svg>
-            </div>
-          </div>
-          <div className="text-xs font-medium drop-shadow-lg">Macintosh HD</div>
+          <svg className="w-16 h-16" viewBox="0 0 64 64" fill="currentColor">
+            <path d="M8 12c0-2.21 1.79-4 4-4h14l4 4h22c2.21 0 4 1.79 4 4v32c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V12z" fill="#60a5fa" />
+            <path d="M8 20h48v28c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V20z" fill="#3b82f6" />
+          </svg>
+          <div className="text-xs font-medium drop-shadow-lg">Documents</div>
         </div>
 
         {/* Projects Folder - Skip to Windows View */}
@@ -265,6 +281,8 @@ export default function Home() {
             setTerminalMinimized(true);
             setShowAppWindows(true);
             setWorkflowStep('idle');
+            setShowBrowser(false);
+            setSandboxCreated(false);
           }}
         >
           <svg className="w-16 h-16" viewBox="0 0 64 64" fill="currentColor">
@@ -289,6 +307,7 @@ export default function Home() {
                   onClick={() => {
                     setTerminalMinimized(true);
                     setShowAppWindows(true);
+                    setShowBrowser(false); // Don't show browser initially
                   }}
                 ></div>
                 <div className="w-3 h-3 rounded-full bg-[#28c840] hover:bg-[#28c840]/80 cursor-pointer"></div>
@@ -324,27 +343,50 @@ export default function Home() {
 
             {/* Show options when in selection mode */}
             {(workflowStep === 'project-type' || workflowStep === 'experience-type') && (
-              <div className="my-1">
-                {(workflowStep === 'project-type' ? projectTypeOptions : experienceTypeOptions).map((option, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center gap-2 py-0.5"
-                  >
-                    <span className={idx === selectedIndex ? 'text-[#06b6d4]' : 'text-[#4b5563]'}>
-                      {idx === selectedIndex ? '●' : '○'}
-                    </span>
-                    <span className={idx === selectedIndex ? 'text-[#06b6d4]' : 'text-[#9ca3af]'}>
-                      {option}
-                    </span>
-                  </div>
-                ))}
+              <div className="my-2">
+                {workflowStep === 'project-type' && (
+                  <>
+                    <div className={`py-1 ${selectedIndex === 0 ? 'text-[#34d399]' : 'text-[#d1d5db]'}`}>
+                      <span className="mr-2">1.</span>
+                      <span className="font-semibold">Starting something new</span>
+                      <div className="ml-6 text-[#6b7280] text-xs">Create a fresh sandbox from scratch</div>
+                    </div>
+                    <div className={`py-1 ${selectedIndex === 1 ? 'text-[#34d399]' : 'text-[#d1d5db]'}`}>
+                      <span className="mr-2">2.</span>
+                      <span className="font-semibold">Continuing on something</span>
+                      <div className="ml-6 text-[#6b7280] text-xs">Resume work on an existing project</div>
+                    </div>
+                  </>
+                )}
+                {workflowStep === 'experience-type' && (
+                  <>
+                    <div className={`py-1 ${selectedIndex === 0 ? 'text-[#34d399]' : 'text-[#d1d5db]'}`}>
+                      <span className="mr-2">1.</span>
+                      <span className="font-semibold">Brand experience</span>
+                      <div className="ml-6 text-[#6b7280] text-xs">Work on brand-facing features and pages</div>
+                    </div>
+                    <div className={`py-1 ${selectedIndex === 1 ? 'text-[#34d399]' : 'text-[#d1d5db]'}`}>
+                      <span className="mr-2">2.</span>
+                      <span className="font-semibold">Retail experience</span>
+                      <div className="ml-6 text-[#6b7280] text-xs">Build retailer-focused functionality</div>
+                    </div>
+                    <div className={`py-1 ${selectedIndex === 2 ? 'text-[#34d399]' : 'text-[#d1d5db]'}`}>
+                      <span className="mr-2">3.</span>
+                      <span className="font-semibold">Logged-out experience</span>
+                      <div className="ml-6 text-[#6b7280] text-xs">Create public-facing pages and features</div>
+                    </div>
+                  </>
+                )}
+                <div className="mt-3 text-[#6b7280] text-xs">
+                  Enter to select · Tab/Arrow keys to navigate · Esc to cancel
+                </div>
               </div>
             )}
 
             {/* Show loading spinner */}
             {workflowStep === 'loading' && (
               <div className="my-1">
-                <div className="flex items-center gap-2 text-[#06b6d4]">
+                <div className="flex items-center gap-2 text-[#34d399]">
                   <span className="text-lg">{spinnerFrames[loadingFrame]}</span>
                   <span>Setting up your environment. This will likely take 3-5 minutes.</span>
                 </div>
@@ -403,8 +445,9 @@ export default function Home() {
       {/* Browser and Cursor Windows */}
       {showAppWindows && (
         <div className="absolute inset-0 flex items-center justify-center gap-4 px-8 py-16 transition-opacity duration-500 opacity-0 animate-fadeIn">
-          {/* Browser Window - Left */}
-          <div className="w-[30%] h-3/4 bg-[#f5f5f5] rounded-lg shadow-2xl overflow-hidden flex flex-col">
+          {/* Browser Window - Left (with invisible placeholder when not shown) */}
+          {showBrowser ? (
+            <div className="w-[50%] h-3/4 bg-[#f5f5f5] rounded-lg shadow-2xl overflow-hidden flex flex-col transition-opacity duration-700 opacity-0 animate-fadeIn">
             {/* Title Bar */}
             <div className="bg-[#e8e8e8] px-4 py-2.5 flex items-center border-b border-[#d1d1d1]">
               {/* Traffic Light Buttons */}
@@ -438,7 +481,7 @@ export default function Home() {
               </div>
               {/* URL Bar */}
               <div className="flex-1 bg-[#f5f5f5] rounded-md px-3 py-1.5 text-sm text-[#5a5a5a]">
-                localhost:3000
+                vibe.faire.com/intrater-102125
               </div>
               {/* Refresh */}
               <div className="w-7 h-7 rounded flex items-center justify-center text-[#5a5a5a] hover:bg-gray-100">
@@ -457,9 +500,12 @@ export default function Home() {
               />
             </div>
           </div>
+          ) : (
+            <div className="w-[50%]"></div>
+          )}
 
-          {/* Cursor Window - Right */}
-          <div className="w-[70%] h-3/4 bg-[#1e1e1e] rounded-lg shadow-2xl overflow-hidden flex flex-col">
+          {/* Cursor Window - Right (always 50% width, same as browser) */}
+          <div className="w-[50%] h-3/4 bg-[#1e1e1e] rounded-lg shadow-2xl overflow-hidden flex flex-col">
             {/* Title Bar */}
             <div className="bg-[#323232] px-4 py-2.5 flex items-center border-b border-[#1e1e1e]">
               {/* Traffic Light Buttons */}
@@ -492,44 +538,100 @@ export default function Home() {
                     <h3 className="text-white font-semibold text-sm">Vibe Code Anything</h3>
                   </div>
 
-                  {/* Confirmation Text */}
-                  <p className="text-[#cccccc] text-xs mb-4 leading-relaxed">
-                    You should now see both this cursor window and a browser window and ready to roll. In case you need it, here are the details:
-                  </p>
+                  {!sandboxCreated ? (
+                    /* State 1: Initial - Before Sandbox Creation */
+                    <>
+                      {/* Confirmation Text */}
+                      <p className="text-[#cccccc] text-xs mb-4 leading-relaxed">
+                        You should now see both this cursor window and a browser window and ready to roll. In case you need it, here are the details:
+                      </p>
 
-                  {/* Project Details Fields */}
-                  <div className="space-y-3 mb-4">
-                    {/* Project Name */}
-                    <div>
-                      <label className="text-[#858585] text-xs font-semibold mb-1 block">Project Name</label>
-                      <div className="bg-[#2d2d2d] border border-[#3d3d3d] rounded px-3 py-2 text-[#cccccc] text-xs">
-                        intrater-102125
+                      {/* Primary Create Sandbox Button */}
+                      <button
+                        onClick={() => {
+                          setSandboxCreated(true);
+                          setShowBrowser(true);
+                        }}
+                        className="w-full bg-[#0e639c] hover:bg-[#1177bb] text-white text-sm py-2.5 px-4 rounded transition-colors font-semibold mb-2"
+                      >
+                        Use default sandbox
+                      </button>
+
+                      {/* Secondary Customize Button */}
+                      <button className="w-full bg-transparent hover:bg-[#2d2d2d] text-[#cccccc] text-sm py-2.5 px-4 rounded transition-colors font-semibold border border-[#3d3d3d]">
+                        Customize sandbox
+                      </button>
+
+                      {/* What is the difference link */}
+                      <div className="text-center mt-3">
+                        <a href="#" className="text-[#4a9eff] hover:underline text-xs inline-flex items-center gap-1">
+                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                          </svg>
+                          explain the difference
+                        </a>
                       </div>
-                    </div>
+                    </>
+                  ) : (
+                    /* State 2: After Sandbox Creation */
+                    <>
+                      {/* Confirmation Text */}
+                      <p className="text-[#cccccc] text-xs mb-4 leading-relaxed">
+                        You should now see both this cursor window and a browser window and ready to roll. In case you need it, here are the details:
+                      </p>
 
-                    {/* Creation Date/Time */}
-                    <div>
-                      <label className="text-[#858585] text-xs font-semibold mb-1 block">Created</label>
-                      <div className="bg-[#2d2d2d] border border-[#3d3d3d] rounded px-3 py-2 text-[#cccccc] text-xs">
-                        Oct 21, 2025 at 10:47 AM
+                      {/* Project Details Fields */}
+                      <div className="space-y-3 mb-4">
+                        {/* Project Name */}
+                        <div>
+                          <label className="text-[#858585] text-xs font-semibold mb-1 block">Project Name</label>
+                          <div className="bg-[#2d2d2d] border border-[#3d3d3d] rounded px-3 py-2 text-[#cccccc] text-xs">
+                            intrater-102125
+                          </div>
+                        </div>
+
+                        {/* Creation Date/Time */}
+                        <div>
+                          <label className="text-[#858585] text-xs font-semibold mb-1 block">Created</label>
+                          <div className="bg-[#2d2d2d] border border-[#3d3d3d] rounded px-3 py-2 text-[#cccccc] text-xs">
+                            Oct 21, 2025 at 10:47 AM
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
 
-                  {/* Primary Save Button */}
-                  <button className="w-full bg-[#0e639c] hover:bg-[#1177bb] text-white text-sm py-2.5 px-4 rounded transition-colors font-semibold mb-2">
-                    Save
-                  </button>
+                      {/* Primary Share Button or URL Box */}
+                      {!showShareUrl ? (
+                        <button
+                          onClick={() => setShowShareUrl(true)}
+                          className="w-full bg-[#0e639c] hover:bg-[#1177bb] text-white text-sm py-2.5 px-4 rounded transition-colors font-semibold mb-2"
+                        >
+                          Share
+                        </button>
+                      ) : (
+                        <div className="flex gap-2 mb-2">
+                          <div className="flex-1 bg-[#2d2d2d] border border-[#3d3d3d] rounded px-3 py-2 text-[#cccccc] text-xs flex items-center">
+                            <span className="truncate">https://vibe.faire.com/intrater-102125</span>
+                          </div>
+                          <button
+                            onClick={handleCopyUrl}
+                            className="bg-[#0e639c] hover:bg-[#1177bb] text-white text-xs py-2 px-4 rounded transition-colors font-semibold whitespace-nowrap"
+                          >
+                            {copySuccess ? 'Copied!' : 'Copy'}
+                          </button>
+                        </div>
+                      )}
 
-                  {/* Secondary Buttons */}
-                  <div className="flex gap-2">
-                    <button className="flex-1 bg-transparent hover:bg-[#2d2d2d] text-[#cccccc] text-xs py-2 px-4 rounded transition-colors font-semibold border border-[#3d3d3d]">
-                      Share
-                    </button>
-                    <button className="flex-1 bg-transparent hover:bg-[#2d2d2d] text-[#cccccc] text-xs py-2 px-4 rounded transition-colors font-semibold border border-[#3d3d3d]">
-                      Help
-                    </button>
-                  </div>
+                      {/* Secondary Buttons */}
+                      <div className="flex gap-2">
+                        <button className="flex-1 bg-transparent hover:bg-[#2d2d2d] text-[#cccccc] text-xs py-2 px-4 rounded transition-colors font-semibold border border-[#3d3d3d]">
+                          Save
+                        </button>
+                        <button className="flex-1 bg-transparent hover:bg-[#2d2d2d] text-[#cccccc] text-xs py-2 px-4 rounded transition-colors font-semibold border border-[#3d3d3d]">
+                          Help
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
