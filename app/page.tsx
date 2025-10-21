@@ -113,7 +113,7 @@ export default function Home() {
       setSelectedIndex(0);
       setLoadingFrame(0);
 
-      // Simulate loading completion after 5 seconds
+      // Simulate loading completion after 3 seconds
       setTimeout(() => {
         setHistory(prev => [
           ...prev,
@@ -130,7 +130,7 @@ export default function Home() {
           setShowAppWindows(true);
           setShowBrowser(false);
         }, 2000);
-      }, 5000);
+      }, 3000);
     }
   };
 
@@ -543,7 +543,7 @@ export default function Home() {
                     <>
                       {/* Confirmation Text */}
                       <p className="text-[#cccccc] text-xs mb-4 leading-relaxed">
-                        You should now see both this cursor window and a browser window and ready to roll. In case you need it, here are the details:
+                        We are almost ready to vibe. Would you like to use an existing sandbox to start working or would you like to customize one to your liking?
                       </p>
 
                       {/* Primary Create Sandbox Button */}
@@ -608,16 +608,25 @@ export default function Home() {
                           Share
                         </button>
                       ) : (
-                        <div className="flex gap-2 mb-2">
-                          <div className="flex-1 bg-[#2d2d2d] border border-[#3d3d3d] rounded px-3 py-2 text-[#cccccc] text-xs flex items-center">
+                        <div className="mb-2">
+                          <div className="w-full bg-[#2d2d2d] border border-[#3d3d3d] rounded px-3 py-2 text-[#cccccc] text-xs flex items-center justify-between gap-2">
                             <span className="truncate">https://vibe.faire.com/intrater-102125</span>
+                            <button
+                              onClick={handleCopyUrl}
+                              className={`flex-shrink-0 transition-colors ${copySuccess ? 'text-[#34d399]' : 'text-[#858585] hover:text-[#cccccc]'}`}
+                              title={copySuccess ? "Copied!" : "Copy URL"}
+                            >
+                              {copySuccess ? (
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                              ) : (
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                              )}
+                            </button>
                           </div>
-                          <button
-                            onClick={handleCopyUrl}
-                            className="bg-[#0e639c] hover:bg-[#1177bb] text-white text-xs py-2 px-4 rounded transition-colors font-semibold whitespace-nowrap"
-                          >
-                            {copySuccess ? 'Copied!' : 'Copy'}
-                          </button>
                         </div>
                       )}
 
@@ -696,7 +705,7 @@ export default function Home() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                             </svg>
                           </button>
-                          <button type="button" className="flex items-center justify-center w-6 h-6 bg-[#3d3d3d] hover:bg-[#4d4d4d] text-[#cccccc] rounded text-xs font-semibold">
+                          <button type="button" className="flex items-center justify-center px-2 h-6 bg-[#3d3d3d] hover:bg-[#4d4d4d] text-[#cccccc] rounded text-[10px] font-bold leading-none">
                             MAX
                           </button>
                           <button type="button" className="text-[#858585] hover:text-[#cccccc]">
@@ -723,19 +732,69 @@ export default function Home() {
                 </div>
 
                 {/* Chat Area */}
-                <div className="flex-1 overflow-auto p-4">
+                <div className="flex-1 overflow-auto p-4 space-y-6">
                   {cursorMessages.map((message, idx) => (
-                    <div key={idx} className="mb-4">
-                      <div className="flex items-start gap-3">
-                        <div className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold ${
-                          message.role === 'user' ? 'bg-[#3d3d3d] text-[#cccccc]' : 'bg-[#0e639c] text-white'
-                        }`}>
-                          {message.role === 'user' ? 'U' : 'AI'}
+                    <div key={idx}>
+                      {message.role === 'user' ? (
+                        /* User Message */
+                        <div className="flex items-start gap-3 group">
+                          <div className="flex-1">
+                            <div className="text-[#cccccc] text-sm leading-relaxed mb-1">{message.content}</div>
+                          </div>
+                          <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button className="text-[#858585] hover:text-[#cccccc] p-1">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                              </svg>
+                            </button>
+                          </div>
                         </div>
-                        <div className="flex-1">
-                          <div className="text-[#cccccc] text-sm leading-relaxed">{message.content}</div>
+                      ) : (
+                        /* AI Response */
+                        <div className="bg-[#1a1a1a] rounded-lg p-4 border border-[#2d2d2d]">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="text-[#cccccc] text-sm leading-relaxed">{message.content}</div>
+                            <div className="flex gap-1 ml-2">
+                              <button className="text-[#858585] hover:text-[#cccccc] p-1">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                              </button>
+                              <button className="text-[#858585] hover:text-[#cccccc] p-1">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                              </button>
+                              <button className="text-[#858585] hover:text-[#cccccc] p-1">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* File Reference */}
+                          <div className="mt-3 flex items-center gap-2 text-xs">
+                            <div className="flex items-center gap-1.5 bg-[#2d2d2d] hover:bg-[#3d3d3d] px-2 py-1 rounded border border-[#3d3d3d] cursor-pointer">
+                              <svg className="w-3.5 h-3.5 text-[#858585]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                              </svg>
+                              <span className="text-[#4a9eff]">app/page.tsx</span>
+                              <span className="text-[#858585]">+1 -1</span>
+                            </div>
+                          </div>
+
+                          {/* Review Changes Button */}
+                          <div className="mt-4 pt-3 border-t border-[#2d2d2d]">
+                            <button className="flex items-center gap-2 text-[#cccccc] hover:text-white text-sm">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                              </svg>
+                              Review Changes
+                            </button>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   ))}
                 </div>
