@@ -53,6 +53,13 @@ export default function Home() {
     }
   }, [workflowStep]);
 
+  // Focus input when terminal opens
+  useEffect(() => {
+    if (!terminalMinimized) {
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  }, [terminalMinimized]);
+
   // Focus Spotlight input when it opens
   useEffect(() => {
     if (spotlightOpen) {
@@ -97,7 +104,7 @@ export default function Home() {
     const trimmedCommand = command.trim().toLowerCase();
 
     if (workflowStep === 'idle') {
-      if (trimmedCommand === 'vibe') {
+      if (trimmedCommand === 'faire vibe') {
         setHistory(prev => [
           ...prev,
           { type: 'output', content: '' },
@@ -885,8 +892,17 @@ export default function Home() {
 
       {/* Spotlight Search Overlay */}
       {spotlightOpen && (
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center pt-48 transition-opacity duration-300">
-          <div className="w-full max-w-2xl mx-4 animate-fadeIn">
+        <div
+          className="absolute inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center pt-48 transition-opacity duration-300"
+          onClick={() => {
+            setSpotlightOpen(false);
+            setSpotlightQuery('');
+          }}
+        >
+          <div
+            className="w-full max-w-2xl mx-4 animate-fadeIn"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Search Box */}
             <div className="bg-white/95 backdrop-blur-md rounded-xl shadow-2xl overflow-hidden transition-all duration-300">
               {/* Search Input */}
@@ -975,19 +991,19 @@ export default function Home() {
                 {/* Workspace Header */}
                 <div className="px-3 py-2 border-b border-white/10">
                   {/* Workspace Name with Dropdown */}
-                  <button className="w-full flex items-center justify-between hover:bg-white/10 px-2 py-1.5 rounded text-white mb-1">
-                    <div className="flex items-center gap-1">
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <button className="flex-1 flex items-center gap-1 hover:bg-white/10 px-2 py-1.5 rounded text-white">
                       <span className="font-bold text-[18px]">Faire</span>
                       <svg className="w-3.5 h-3.5 text-white/70" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                       </svg>
-                    </div>
-                    <button className="w-7 h-7 flex items-center justify-center hover:bg-white/20 rounded">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    </button>
+                    <button className="w-7 h-7 flex items-center justify-center hover:bg-white/20 rounded flex-shrink-0">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                       </svg>
                     </button>
-                  </button>
+                  </div>
 
                   {/* Navigation Menu */}
                   <div className="space-y-0.5 text-[14px] mb-2">
