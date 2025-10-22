@@ -27,6 +27,7 @@ export default function Home() {
   const [showBrowser, setShowBrowser] = useState(false);
   const [spotlightOpen, setSpotlightOpen] = useState(false);
   const [spotlightQuery, setSpotlightQuery] = useState('');
+  const [showSlackWindow, setShowSlackWindow] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const cursorInputRef = useRef<HTMLTextAreaElement>(null);
@@ -53,6 +54,16 @@ export default function Home() {
       setTimeout(() => spotlightInputRef.current?.focus(), 100);
     }
   }, [spotlightOpen]);
+
+  // Trigger Slack window after copy success
+  useEffect(() => {
+    if (copySuccess) {
+      const timer = setTimeout(() => {
+        setShowSlackWindow(true);
+      }, 1500); // 1.5 seconds after checkmark appears
+      return () => clearTimeout(timer);
+    }
+  }, [copySuccess]);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -920,6 +931,148 @@ export default function Home() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Slack Window Overlay */}
+      {showSlackWindow && (
+        <div className="absolute inset-0 z-[60] flex items-center justify-center p-8 animate-fadeIn">
+          <div className="w-full max-w-6xl h-[85vh] bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col">
+            {/* Title Bar */}
+            <div className="bg-[#4a154b] px-4 py-2.5 flex items-center border-b border-[#3d0f3e]">
+              {/* Traffic Light Buttons */}
+              <div className="flex gap-2">
+                <div className="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#febc2e]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#28c840]"></div>
+              </div>
+              {/* Workspace Name */}
+              <div className="flex-1 text-center text-white text-sm font-semibold">
+                Faire — Slack
+              </div>
+              {/* Spacer */}
+              <div className="w-[60px]"></div>
+            </div>
+
+            {/* Main Slack Content */}
+            <div className="flex-1 flex overflow-hidden">
+              {/* Left Sidebar */}
+              <div className="w-60 bg-[#3f0e40] text-white flex flex-col">
+                {/* Workspace Header */}
+                <div className="p-4 border-b border-[#522653]">
+                  <div className="font-bold text-lg mb-1">Faire</div>
+                  <div className="flex items-center gap-1 text-sm text-gray-300">
+                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    <span>John Intrater</span>
+                  </div>
+                </div>
+
+                {/* Channels List */}
+                <div className="flex-1 overflow-y-auto p-2">
+                  <div className="mb-4">
+                    <div className="text-gray-400 text-xs font-semibold px-2 mb-1">Channels</div>
+                    <div className="bg-[#1164a3] text-white px-2 py-1 rounded cursor-pointer flex items-center gap-2">
+                      <span className="text-sm">#</span>
+                      <span className="font-medium">engineering</span>
+                    </div>
+                    <div className="text-gray-300 px-2 py-1 rounded hover:bg-[#522653] cursor-pointer flex items-center gap-2 mt-1">
+                      <span className="text-sm">#</span>
+                      <span>general</span>
+                    </div>
+                    <div className="text-gray-300 px-2 py-1 rounded hover:bg-[#522653] cursor-pointer flex items-center gap-2 mt-1">
+                      <span className="text-sm">#</span>
+                      <span>random</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-400 text-xs font-semibold px-2 mb-1">Direct Messages</div>
+                    <div className="text-gray-300 px-2 py-1 rounded hover:bg-[#522653] cursor-pointer flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                      <span>Sarah Chen</span>
+                    </div>
+                    <div className="text-gray-300 px-2 py-1 rounded hover:bg-[#522653] cursor-pointer flex items-center gap-2 mt-1">
+                      <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                      <span>Alex Kim</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Chat Area */}
+              <div className="flex-1 flex flex-col bg-white">
+                {/* Channel Header */}
+                <div className="border-b border-gray-200 px-4 py-3 flex items-center gap-2">
+                  <span className="text-xl font-bold"># engineering</span>
+                  <div className="text-gray-500 text-sm">|</div>
+                  <div className="text-gray-500 text-sm">Team collaboration and updates</div>
+                </div>
+
+                {/* Messages Area */}
+                <div className="flex-1 overflow-y-auto p-4 bg-white">
+                  <div className="mb-4">
+                    <div className="text-center text-gray-500 text-sm mb-4">
+                      <div className="inline-block bg-white border border-gray-200 rounded px-3 py-1">
+                        Today
+                      </div>
+                    </div>
+
+                    {/* Example message */}
+                    <div className="flex gap-3 mb-4">
+                      <div className="w-9 h-9 rounded bg-blue-500 flex items-center justify-center text-white font-semibold flex-shrink-0">
+                        SC
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-baseline gap-2 mb-1">
+                          <span className="font-bold text-sm">Sarah Chen</span>
+                          <span className="text-xs text-gray-500">10:23 AM</span>
+                        </div>
+                        <div className="text-sm text-gray-900">
+                          Great work on the latest deployment! Everything looks smooth 🚀
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Message Input Area */}
+                <div className="border-t border-gray-200 p-4">
+                  <div className="border border-gray-300 rounded-lg overflow-hidden">
+                    <div className="p-3 bg-white">
+                      <div className="text-sm text-gray-900 mb-2">
+                        Hey, just made this fix would love you to check it out
+                      </div>
+                      <div className="flex items-center gap-2 p-2 bg-gray-50 border border-gray-200 rounded">
+                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                        <span className="text-sm text-blue-600 flex-1">vibe.faire.com/intrater-102125</span>
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 px-3 py-2 border-t border-gray-200 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <button className="w-7 h-7 flex items-center justify-center hover:bg-gray-200 rounded text-gray-600">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                        </button>
+                        <button className="w-7 h-7 flex items-center justify-center hover:bg-gray-200 rounded text-gray-600">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </button>
+                      </div>
+                      <button className="bg-[#007a5a] hover:bg-[#006644] text-white px-4 py-1.5 rounded text-sm font-semibold flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                        </svg>
+                        Send
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
