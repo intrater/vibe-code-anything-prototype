@@ -28,10 +28,13 @@ export default function Home() {
   const [spotlightOpen, setSpotlightOpen] = useState(false);
   const [spotlightQuery, setSpotlightQuery] = useState('');
   const [showSlackWindow, setShowSlackWindow] = useState(false);
+  const [slackMessage, setSlackMessage] = useState('');
+  const [showSlackUrl, setShowSlackUrl] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const cursorInputRef = useRef<HTMLTextAreaElement>(null);
   const spotlightInputRef = useRef<HTMLInputElement>(null);
+  const slackInputRef = useRef<HTMLTextAreaElement>(null);
 
   const projectTypeOptions = ['Starting something new', 'Continuing on something'];
   const experienceTypeOptions = ['Brand experience', 'Retail experience', 'Logged-out experience'];
@@ -64,6 +67,13 @@ export default function Home() {
       return () => clearTimeout(timer);
     }
   }, [copySuccess]);
+
+  // Focus Slack input when it opens
+  useEffect(() => {
+    if (showSlackWindow) {
+      setTimeout(() => slackInputRef.current?.focus(), 100);
+    }
+  }, [showSlackWindow]);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -1094,22 +1104,46 @@ export default function Home() {
 
                 {/* Message Input Area */}
                 <div className="border-t border-gray-300 px-5 pb-6 pt-5">
-                  <div className="border-2 border-gray-300 rounded-lg overflow-hidden hover:border-gray-400 transition-colors">
+                  <div className="border-2 border-gray-300 rounded-lg overflow-hidden hover:border-gray-400 transition-colors focus-within:border-[#1164a3] focus-within:shadow-md">
                     <div className="px-3 pt-2 pb-1 bg-white">
-                      <div className="text-[15px] text-[#1d1c1d] mb-2 leading-snug">
-                        Just built this! Take a look 👀
-                      </div>
-                      <div className="flex items-start gap-2 p-3 bg-[#f8f8f8] border border-gray-200 rounded hover:bg-gray-100 transition-colors">
-                        <div className="flex-shrink-0 mt-0.5">
-                          <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                          </svg>
+                      <textarea
+                        ref={slackInputRef}
+                        value={slackMessage}
+                        onChange={(e) => setSlackMessage(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            if (slackMessage.trim()) {
+                              setShowSlackUrl(true);
+                            }
+                          }
+                        }}
+                        placeholder="Message #engineering"
+                        className="w-full text-[15px] text-[#1d1c1d] leading-snug resize-none outline-none bg-white min-h-[40px] max-h-[200px]"
+                        rows={1}
+                        style={{
+                          height: 'auto',
+                          minHeight: '40px'
+                        }}
+                        onInput={(e) => {
+                          const target = e.target as HTMLTextAreaElement;
+                          target.style.height = 'auto';
+                          target.style.height = Math.min(target.scrollHeight, 200) + 'px';
+                        }}
+                      />
+                      {showSlackUrl && (
+                        <div className="flex items-start gap-2 p-3 mt-2 bg-[#f8f8f8] border border-gray-200 rounded hover:bg-gray-100 transition-colors">
+                          <div className="flex-shrink-0 mt-0.5">
+                            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                            </svg>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-[#1264a3] truncate">vibe.faire.com</div>
+                            <div className="text-xs text-gray-600 truncate">intrater-102125</div>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm font-semibold text-[#1264a3] truncate">vibe.faire.com</div>
-                          <div className="text-xs text-gray-600 truncate">intrater-102125</div>
-                        </div>
-                      </div>
+                      )}
                     </div>
                     <div className="bg-[#f8f8f8] px-3 py-2 border-t border-gray-200 flex items-center justify-between">
                       <div className="flex items-center gap-1">
