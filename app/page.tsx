@@ -32,6 +32,7 @@ export default function Home() {
   const [showSlackUrl, setShowSlackUrl] = useState(false);
   const [slackMessageSent, setSlackMessageSent] = useState(false);
   const [sentMessageText, setSentMessageText] = useState('');
+  const [customizeSandboxMode, setCustomizeSandboxMode] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const cursorInputRef = useRef<HTMLTextAreaElement>(null);
@@ -223,17 +224,28 @@ export default function Home() {
     if (cursorInput.trim()) {
       // Add user message
       setCursorMessages(prev => [...prev, { role: 'user', content: cursorInput }]);
+      const userMessage = cursorInput;
       setCursorInput('');
 
       // Simulate AI response after a short delay
       setTimeout(() => {
-        setCursorMessages(prev => [...prev, {
-          role: 'assistant',
-          content: 'I\'ll help you make the "Welcome back, Supper Club" text larger. Let me update the CSS for that heading.'
-        }]);
+        if (customizeSandboxMode) {
+          // Handle customize sandbox mode
+          setCursorMessages(prev => [...prev, {
+            role: 'assistant',
+            content: 'Sure I will update the sandbox for you.'
+          }]);
+          setCustomizeSandboxMode(false);
+        } else {
+          // Handle normal mode (making text larger)
+          setCursorMessages(prev => [...prev, {
+            role: 'assistant',
+            content: 'I\'ll help you make the "Welcome back, Supper Club" text larger. Let me update the CSS for that heading.'
+          }]);
 
-        // Change browser screenshot after AI responds
-        setBrowserScreenshot('faire-screenshot2.png');
+          // Change browser screenshot after AI responds
+          setBrowserScreenshot('faire-screenshot2.png');
+        }
       }, 1000);
     }
   };
@@ -630,25 +642,10 @@ export default function Home() {
                           setSandboxCreated(true);
                           setShowBrowser(true);
                         }}
-                        className="w-full bg-[#0e639c] hover:bg-[#1177bb] text-white text-sm py-2.5 px-4 rounded transition-colors font-semibold mb-2"
+                        className="w-full bg-[#0e639c] hover:bg-[#1177bb] text-white text-sm py-2.5 px-4 rounded transition-colors font-semibold"
                       >
-                        Use default sandbox
+                        Launch sandbox
                       </button>
-
-                      {/* Secondary Customize Button */}
-                      <button className="w-full bg-transparent hover:bg-[#2d2d2d] text-[#cccccc] text-sm py-2.5 px-4 rounded transition-colors font-semibold border border-[#3d3d3d]">
-                        Customize sandbox
-                      </button>
-
-                      {/* What is the difference link */}
-                      <div className="text-center mt-3">
-                        <a href="#" className="text-[#4a9eff] hover:underline text-xs inline-flex items-center gap-1">
-                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                          </svg>
-                          explain the difference
-                        </a>
-                      </div>
                     </>
                   ) : (
                     /* State 2: After Sandbox Creation */
@@ -709,13 +706,35 @@ export default function Home() {
                       )}
 
                       {/* Secondary Buttons */}
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 mb-3">
                         <button className="flex-1 bg-transparent hover:bg-[#2d2d2d] text-[#cccccc] text-xs py-2 px-4 rounded transition-colors font-semibold border border-[#3d3d3d]">
                           Save
                         </button>
                         <button className="flex-1 bg-transparent hover:bg-[#2d2d2d] text-[#cccccc] text-xs py-2 px-4 rounded transition-colors font-semibold border border-[#3d3d3d]">
                           Help
                         </button>
+                      </div>
+
+                      {/* Customize Sandbox Link */}
+                      <div className="text-center">
+                        <a
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            // Clear chat and pre-fill with customize message
+                            setCursorMessages([]);
+                            setCursorInput('I want to customize this sandbox...');
+                            setCustomizeSandboxMode(true);
+                            // Focus the chat input
+                            setTimeout(() => cursorInputRef.current?.focus(), 100);
+                          }}
+                          className="text-[#4a9eff] hover:underline text-xs inline-flex items-center gap-1"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                          </svg>
+                          customize sandbox
+                        </a>
                       </div>
                     </>
                   )}
