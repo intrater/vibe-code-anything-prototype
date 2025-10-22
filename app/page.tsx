@@ -31,6 +31,7 @@ export default function Home() {
   const [slackMessage, setSlackMessage] = useState('');
   const [showSlackUrl, setShowSlackUrl] = useState(false);
   const [slackMessageSent, setSlackMessageSent] = useState(false);
+  const [sentMessageText, setSentMessageText] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const cursorInputRef = useRef<HTMLTextAreaElement>(null);
@@ -972,18 +973,54 @@ export default function Home() {
               {/* Left Sidebar */}
               <div className="w-64 bg-[#3f0e40] text-white flex flex-col">
                 {/* Workspace Header */}
-                <div className="px-4 py-3 border-b border-white/10">
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="font-bold text-[15px]">Faire</div>
-                    <button className="w-6 h-6 flex items-center justify-center hover:bg-white/10 rounded">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                <div className="px-3 py-2 border-b border-white/10">
+                  {/* Workspace Name with Dropdown */}
+                  <button className="w-full flex items-center justify-between hover:bg-white/10 px-2 py-1.5 rounded text-white mb-1">
+                    <div className="flex items-center gap-1">
+                      <span className="font-bold text-[18px]">Faire</span>
+                      <svg className="w-3.5 h-3.5 text-white/70" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <button className="w-7 h-7 flex items-center justify-center hover:bg-white/20 rounded">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                       </svg>
                     </button>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-sm">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#2BAC76] border-2 border-[#3f0e40]"></div>
-                    <span className="text-white/90">John Intrater</span>
+                  </button>
+
+                  {/* Navigation Menu */}
+                  <div className="space-y-0.5 text-[14px] mb-2">
+                    <button className="w-full text-left px-2 py-1 hover:bg-white/10 rounded flex items-center gap-2 text-white/90">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      <span>Unreads</span>
+                    </button>
+                    <button className="w-full text-left px-2 py-1 hover:bg-white/10 rounded flex items-center gap-2 text-white/90">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                      </svg>
+                      <span>Threads</span>
+                    </button>
+                    <button className="w-full text-left px-2 py-1 hover:bg-white/10 rounded flex items-center gap-2 text-white/90">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      <span>Huddles</span>
+                    </button>
+                    <button className="w-full text-left px-2 py-1 hover:bg-white/10 rounded flex items-center gap-2 text-white/90">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                      </svg>
+                      <span>Drafts & sent</span>
+                    </button>
+                    <button className="w-full text-left px-2 py-1 hover:bg-white/10 rounded flex items-center gap-2 text-white/90">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                      </svg>
+                      <span>Directories</span>
+                    </button>
                   </div>
                 </div>
 
@@ -997,21 +1034,37 @@ export default function Home() {
                       <span className="font-semibold">Channels</span>
                     </button>
                     <div className="space-y-0.5">
-                      <div className="bg-[#1164A3] text-white px-2 py-1 rounded flex items-center gap-2 font-medium">
-                        <span className="text-white/90">#</span>
-                        <span>engineering</span>
+                      <div className="text-white/70 hover:bg-white/10 px-2 py-1 rounded flex items-center gap-2 cursor-pointer">
+                        <span className="text-white/60">#</span>
+                        <span>hack-week-2025</span>
+                      </div>
+                      <div className="text-white/70 hover:bg-white/10 px-2 py-1 rounded flex items-center gap-2 cursor-pointer">
+                        <span className="text-white/60">#</span>
+                        <span>ai-help</span>
                       </div>
                       <div className="text-white/70 hover:bg-white/10 px-2 py-1 rounded flex items-center gap-2 cursor-pointer">
                         <span className="text-white/60">#</span>
                         <span>general</span>
                       </div>
-                      <div className="text-white/70 hover:bg-white/10 px-2 py-1 rounded flex items-center gap-2 cursor-pointer">
-                        <span className="text-white/60">#</span>
-                        <span>product</span>
+                      <div className="bg-[#1164A3] text-white px-2 py-1 rounded flex items-center gap-2 font-medium">
+                        <span className="text-white/90">#</span>
+                        <span>upmarket-plus-epdd</span>
                       </div>
                       <div className="text-white/70 hover:bg-white/10 px-2 py-1 rounded flex items-center gap-2 cursor-pointer">
                         <span className="text-white/60">#</span>
-                        <span>random</span>
+                        <span>ai-lab</span>
+                      </div>
+                      <div className="text-white/70 hover:bg-white/10 px-2 py-1 rounded flex items-center gap-2 cursor-pointer">
+                        <span className="text-white/60">#</span>
+                        <span>f-cursor</span>
+                      </div>
+                      <div className="text-white/70 hover:bg-white/10 px-2 py-1 rounded flex items-center gap-2 cursor-pointer">
+                        <span className="text-white/60">#</span>
+                        <span>launch-announcements</span>
+                      </div>
+                      <div className="text-white/70 hover:bg-white/10 px-2 py-1 rounded flex items-center gap-2 cursor-pointer">
+                        <span className="text-white/60">#</span>
+                        <span>bug-reports</span>
                       </div>
                     </div>
                   </div>
@@ -1025,12 +1078,12 @@ export default function Home() {
                     </button>
                     <div className="space-y-0.5">
                       <div className="text-white/70 hover:bg-white/10 px-2 py-1 rounded flex items-center gap-2 cursor-pointer">
-                        <div className="w-5 h-5 rounded bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">S</div>
-                        <span>Sarah Chen</span>
+                        <img src="/leon.jpg" alt="Leon Kempers" className="w-5 h-5 rounded flex-shrink-0 object-cover" />
+                        <span>Leon Kempers</span>
                       </div>
                       <div className="text-white/70 hover:bg-white/10 px-2 py-1 rounded flex items-center gap-2 cursor-pointer">
-                        <div className="w-5 h-5 rounded bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">A</div>
-                        <span>Alex Kim</span>
+                        <img src="/sebastian.jpg" alt="Sebastian Villate" className="w-5 h-5 rounded flex-shrink-0 object-cover" />
+                        <span>Sebastian Villate</span>
                       </div>
                     </div>
                   </div>
@@ -1042,7 +1095,7 @@ export default function Home() {
                 {/* Channel Header */}
                 <div className="border-b border-gray-200 px-5 py-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg font-black text-[#1d1c1d]"># engineering</span>
+                    <span className="text-lg font-black text-[#1d1c1d]"># upmarket-plus-epdd</span>
                     <svg className="w-3.5 h-3.5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
@@ -1070,12 +1123,10 @@ export default function Home() {
                   {/* Previous messages */}
                   <div className="mb-3 hover:bg-gray-50 -mx-5 px-5 py-1">
                     <div className="flex gap-2">
-                      <div className="w-9 h-9 rounded bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                        S
-                      </div>
+                      <img src="/leon.jpg" alt="Leon Kempers" className="w-9 h-9 rounded flex-shrink-0 object-cover" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline gap-2 mb-0.5">
-                          <span className="font-black text-[15px] text-[#1d1c1d]">Sarah Chen</span>
+                          <span className="font-black text-[15px] text-[#1d1c1d]">Leon Kempers</span>
                           <span className="text-xs text-gray-600">10:23 AM</span>
                         </div>
                         <div className="text-[15px] text-[#1d1c1d] leading-snug">
@@ -1087,16 +1138,14 @@ export default function Home() {
 
                   <div className="mb-3 hover:bg-gray-50 -mx-5 px-5 py-1">
                     <div className="flex gap-2">
-                      <div className="w-9 h-9 rounded bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                        A
-                      </div>
+                      <img src="/sebastian.jpg" alt="Sebastian Villate" className="w-9 h-9 rounded flex-shrink-0 object-cover" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline gap-2 mb-0.5">
-                          <span className="font-black text-[15px] text-[#1d1c1d]">Alex Kim</span>
+                          <span className="font-black text-[15px] text-[#1d1c1d]">Sebastian Villate</span>
                           <span className="text-xs text-gray-600">10:24 AM</span>
                         </div>
                         <div className="text-[15px] text-[#1d1c1d] leading-snug">
-                          Nice! How long did the migration take?
+                          thanks! great team effort all around
                         </div>
                       </div>
                     </div>
@@ -1106,16 +1155,14 @@ export default function Home() {
                   {slackMessageSent && (
                     <div className="mb-3 hover:bg-gray-50 -mx-5 px-5 py-1 animate-fadeIn">
                       <div className="flex gap-2">
-                        <div className="w-9 h-9 rounded bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                          J
-                        </div>
+                        <img src="/john.jpg" alt="John Intrater" className="w-9 h-9 rounded flex-shrink-0 object-cover" />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-baseline gap-2 mb-0.5">
                             <span className="font-black text-[15px] text-[#1d1c1d]">John Intrater</span>
                             <span className="text-xs text-gray-600">10:25 AM</span>
                           </div>
                           <div className="text-[15px] text-[#1d1c1d] leading-snug mb-2">
-                            {slackMessage}
+                            {sentMessageText}
                           </div>
                           <div className="flex items-start gap-2 p-3 bg-[#f8f8f8] border border-gray-200 rounded max-w-md">
                             <div className="flex-shrink-0 mt-0.5">
@@ -1145,16 +1192,20 @@ export default function Home() {
                         onKeyDown={(e) => {
                           if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault();
-                            if (!showSlackUrl && slackMessage.trim()) {
-                              // First Enter: show URL
+                            if (slackMessage.trim() && !slackMessageSent) {
+                              // Send message immediately
+                              setSentMessageText(slackMessage);
                               setShowSlackUrl(true);
-                            } else if (showSlackUrl && slackMessage.trim()) {
-                              // Second Enter: send message
                               setSlackMessageSent(true);
+                              setSlackMessage('');
+                              // Reset textarea height
+                              if (slackInputRef.current) {
+                                slackInputRef.current.style.height = '40px';
+                              }
                             }
                           }
                         }}
-                        placeholder="Message #engineering"
+                        placeholder="Message #upmarket-plus-epdd"
                         className="w-full text-[15px] text-[#1d1c1d] leading-snug resize-none outline-none bg-white min-h-[40px] max-h-[200px]"
                         rows={1}
                         style={{
@@ -1166,9 +1217,8 @@ export default function Home() {
                           target.style.height = 'auto';
                           target.style.height = Math.min(target.scrollHeight, 200) + 'px';
                         }}
-                        disabled={slackMessageSent}
                       />
-                      {showSlackUrl && (
+                      {showSlackUrl && !slackMessageSent && (
                         <div className="flex items-start gap-2 p-3 mt-2 bg-[#f8f8f8] border border-gray-200 rounded hover:bg-gray-100 transition-colors">
                           <div className="flex-shrink-0 mt-0.5">
                             <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1202,13 +1252,21 @@ export default function Home() {
                       </div>
                       <button
                         onClick={() => {
-                          if (slackMessage.trim() && showSlackUrl && !slackMessageSent) {
+                          if (slackMessage.trim() && !slackMessageSent) {
+                            // Send message immediately
+                            setSentMessageText(slackMessage);
+                            setShowSlackUrl(true);
                             setSlackMessageSent(true);
+                            setSlackMessage('');
+                            // Reset textarea height
+                            if (slackInputRef.current) {
+                              slackInputRef.current.style.height = '40px';
+                            }
                           }
                         }}
-                        disabled={!showSlackUrl || slackMessageSent}
+                        disabled={!slackMessage.trim() || slackMessageSent}
                         className={`px-4 py-1.5 rounded font-semibold text-[13px] shadow-sm flex items-center gap-1.5 transition-colors ${
-                          showSlackUrl && !slackMessageSent
+                          slackMessage.trim() && !slackMessageSent
                             ? 'bg-[#007a5a] hover:bg-[#148567] text-white cursor-pointer'
                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         }`}
