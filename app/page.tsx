@@ -261,10 +261,42 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 relative">
-      {/* macOS Menu Bar */}
-      <div className="bg-white/20 backdrop-blur-md border-b border-white/10 px-4 py-1 flex items-center justify-between">
-        <div className="flex items-center gap-6 text-white text-sm font-medium">
+    <div className="h-screen w-screen overflow-hidden relative" style={{
+      backgroundImage: 'url(/oldschool.png)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }}>
+      {/* macOS Menu Bar - Aqua Style */}
+      <div className="px-4 py-1 flex items-center justify-between" style={{
+        background: `
+          linear-gradient(
+            0deg,
+            transparent 0%, transparent 14%,
+            rgba(180,190,200,0.5) 14%, rgba(180,190,200,0.5) 15%,
+            transparent 15%, transparent 28%,
+            rgba(180,190,200,0.5) 28%, rgba(180,190,200,0.5) 29%,
+            transparent 29%, transparent 42%,
+            rgba(180,190,200,0.5) 42%, rgba(180,190,200,0.5) 43%,
+            transparent 43%, transparent 57%,
+            rgba(180,190,200,0.5) 57%, rgba(180,190,200,0.5) 58%,
+            transparent 58%, transparent 71%,
+            rgba(180,190,200,0.5) 71%, rgba(180,190,200,0.5) 72%,
+            transparent 72%, transparent 85%,
+            rgba(180,190,200,0.5) 85%, rgba(180,190,200,0.5) 86%,
+            transparent 86%, transparent 100%
+          ),
+          linear-gradient(180deg, rgba(235,240,245,0.98) 0%, rgba(220,230,240,0.96) 50%, rgba(210,220,235,0.95) 100%)
+        `,
+        borderBottom: '1px solid rgba(100,120,150,0.4)',
+        backdropFilter: 'blur(20px)',
+        boxShadow: '0 1px 0 rgba(255,255,255,0.5) inset, 0 1px 3px rgba(0,0,0,0.2)'
+      }}>
+        <div className="flex items-center gap-6 text-sm" style={{
+          color: '#000000',
+          textShadow: '0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(255,255,255,0.8)',
+          fontWeight: '500'
+        }}>
           <div className="font-bold text-lg"></div>
           <div>Finder</div>
           <div>File</div>
@@ -274,7 +306,7 @@ export default function Home() {
           <div>Window</div>
           <div>Help</div>
         </div>
-        <div className="flex items-center gap-4 text-white text-xs">
+        <div className="flex items-center gap-4 text-xs" style={{ color: '#1a1a1a' }}>
           <div className="flex items-center gap-1">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
@@ -324,11 +356,21 @@ export default function Home() {
             setSpotlightQuery('');
           }}
         >
-          <svg className="w-16 h-16" viewBox="0 0 64 64" fill="currentColor">
-            <path d="M8 12c0-2.21 1.79-4 4-4h14l4 4h22c2.21 0 4 1.79 4 4v32c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V12z" fill="#60a5fa" />
-            <path d="M8 20h48v28c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V20z" fill="#3b82f6" />
+          <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none">
+            <defs>
+              <linearGradient id="folderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style={{stopColor: '#7ab5e8', stopOpacity: 1}} />
+                <stop offset="100%" style={{stopColor: '#4a8dc7', stopOpacity: 1}} />
+              </linearGradient>
+            </defs>
+            <path d="M8 16c0-2.21 1.79-4 4-4h12l4 4h24c2.21 0 4 1.79 4 4v28c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V16z" fill="url(#folderGrad)" stroke="#2d6a9f" strokeWidth="0.5"/>
+            <path d="M8 24h48v24c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V24z" fill="#5a9dd4" opacity="0.8"/>
+            <ellipse cx="32" cy="20" rx="3" ry="1.5" fill="rgba(255,255,255,0.4)"/>
           </svg>
-          <div className="text-xs font-medium drop-shadow-lg">Photos</div>
+          <div className="text-xs font-bold" style={{
+            color: '#ffffff',
+            textShadow: '0 1px 0 rgba(0,0,0,0.8), 0 2px 3px rgba(0,0,0,0.6)'
+          }}>Photos</div>
         </div>
 
         {/* Documents Folder - Open Terminal Window */}
@@ -355,11 +397,21 @@ export default function Home() {
             setSpotlightQuery('');
           }}
         >
-          <svg className="w-16 h-16" viewBox="0 0 64 64" fill="currentColor">
-            <path d="M8 12c0-2.21 1.79-4 4-4h14l4 4h22c2.21 0 4 1.79 4 4v32c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V12z" fill="#60a5fa" />
-            <path d="M8 20h48v28c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V20z" fill="#3b82f6" />
+          <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none">
+            <defs>
+              <linearGradient id="folderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style={{stopColor: '#7ab5e8', stopOpacity: 1}} />
+                <stop offset="100%" style={{stopColor: '#4a8dc7', stopOpacity: 1}} />
+              </linearGradient>
+            </defs>
+            <path d="M8 16c0-2.21 1.79-4 4-4h12l4 4h24c2.21 0 4 1.79 4 4v28c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V16z" fill="url(#folderGrad)" stroke="#2d6a9f" strokeWidth="0.5"/>
+            <path d="M8 24h48v24c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V24z" fill="#5a9dd4" opacity="0.8"/>
+            <ellipse cx="32" cy="20" rx="3" ry="1.5" fill="rgba(255,255,255,0.4)"/>
           </svg>
-          <div className="text-xs font-medium drop-shadow-lg">Documents</div>
+          <div className="text-xs font-bold" style={{
+            color: '#ffffff',
+            textShadow: '0 1px 0 rgba(0,0,0,0.8), 0 2px 3px rgba(0,0,0,0.6)'
+          }}>Documents</div>
         </div>
 
         {/* Projects Folder - Open Cursor Window */}
@@ -375,35 +427,86 @@ export default function Home() {
             setSpotlightQuery('');
           }}
         >
-          <svg className="w-16 h-16" viewBox="0 0 64 64" fill="currentColor">
-            <path d="M8 12c0-2.21 1.79-4 4-4h14l4 4h22c2.21 0 4 1.79 4 4v32c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V12z" fill="#60a5fa" />
-            <path d="M8 20h48v28c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V20z" fill="#3b82f6" />
+          <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none">
+            <defs>
+              <linearGradient id="folderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style={{stopColor: '#7ab5e8', stopOpacity: 1}} />
+                <stop offset="100%" style={{stopColor: '#4a8dc7', stopOpacity: 1}} />
+              </linearGradient>
+            </defs>
+            <path d="M8 16c0-2.21 1.79-4 4-4h12l4 4h24c2.21 0 4 1.79 4 4v28c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V16z" fill="url(#folderGrad)" stroke="#2d6a9f" strokeWidth="0.5"/>
+            <path d="M8 24h48v24c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V24z" fill="#5a9dd4" opacity="0.8"/>
+            <ellipse cx="32" cy="20" rx="3" ry="1.5" fill="rgba(255,255,255,0.4)"/>
           </svg>
-          <div className="text-xs font-medium drop-shadow-lg">Projects</div>
+          <div className="text-xs font-bold" style={{
+            color: '#ffffff',
+            textShadow: '0 1px 0 rgba(0,0,0,0.8), 0 2px 3px rgba(0,0,0,0.6)'
+          }}>Projects</div>
         </div>
       </div>
 
       {/* Terminal Window - Centered and Floating */}
       {!terminalMinimized && (
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl px-8 transition-opacity duration-500 opacity-0 animate-fadeIn">
-          <div className="bg-[#292929]/75 backdrop-blur-md rounded-lg shadow-2xl overflow-hidden">
-            {/* Title Bar */}
-            <div className="bg-[#323232]/75 backdrop-blur-md px-4 py-2.5 flex items-center border-b border-[#1e1e1e]">
-              {/* Traffic Light Buttons */}
+          <div className="backdrop-blur-md rounded-xl overflow-hidden" style={{
+            boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3)'
+          }}>
+            {/* Title Bar - Aqua Style */}
+            <div className="px-4 py-2.5 flex items-center" style={{
+              background: `
+                linear-gradient(
+                  0deg,
+                  transparent 0%, transparent 14%,
+                  rgba(160,170,180,0.5) 14%, rgba(160,170,180,0.5) 15%,
+                  transparent 15%, transparent 28%,
+                  rgba(160,170,180,0.5) 28%, rgba(160,170,180,0.5) 29%,
+                  transparent 29%, transparent 42%,
+                  rgba(160,170,180,0.5) 42%, rgba(160,170,180,0.5) 43%,
+                  transparent 43%, transparent 57%,
+                  rgba(160,170,180,0.5) 57%, rgba(160,170,180,0.5) 58%,
+                  transparent 58%, transparent 71%,
+                  rgba(160,170,180,0.5) 71%, rgba(160,170,180,0.5) 72%,
+                  transparent 72%, transparent 85%,
+                  rgba(160,170,180,0.5) 85%, rgba(160,170,180,0.5) 86%,
+                  transparent 86%, transparent 100%
+                ),
+                linear-gradient(180deg, #f5f6f7 0%, #e8eaec 50%, #dfe1e4 100%)
+              `,
+              borderBottom: '1px solid #b0b5ba',
+              boxShadow: '0 1px 0 rgba(255,255,255,0.8) inset, 0 1px 2px rgba(0,0,0,0.1)'
+            }}>
+              {/* Traffic Light Buttons - Candy Style */}
               <div className="flex gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#ff5f57] hover:bg-[#ff5f57]/80 cursor-pointer"></div>
+                <div className="w-3 h-3 rounded-full cursor-pointer" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #ff6961, #ec5f59 45%, #d84942 65%, #c73d38)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(180,60,60,0.5)'
+                }}></div>
                 <div
-                  className="w-3 h-3 rounded-full bg-[#febc2e] hover:bg-[#febc2e]/80 cursor-pointer"
+                  className="w-3 h-3 rounded-full cursor-pointer"
                   onClick={() => {
                     setTerminalMinimized(true);
                     setShowAppWindows(true);
-                    setShowBrowser(false); // Don't show browser initially
+                    setShowBrowser(false);
+                  }}
+                  style={{
+                    background: 'radial-gradient(circle at 35% 35%, #ffc52f, #ffbe2e 45%, #f0ac1e 65%, #e09e15)',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                    border: '0.5px solid rgba(200,150,40,0.5)'
                   }}
                 ></div>
-                <div className="w-3 h-3 rounded-full bg-[#28c840] hover:bg-[#28c840]/80 cursor-pointer"></div>
+                <div className="w-3 h-3 rounded-full cursor-pointer" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #2dd04a, #28ca42 45%, #23b83a 65%, #1fa633)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(40,160,50,0.5)'
+                }}></div>
               </div>
             {/* Window Title */}
-            <div className="flex-1 text-center text-[#b8b8b8] text-sm font-medium">
+            <div className="flex-1 text-center text-sm font-medium" style={{
+              color: '#2a2a2a',
+              textShadow: '0 1px 0 rgba(255,255,255,0.9)',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "Lucida Grande", sans-serif'
+            }}>
               Terminal
             </div>
             {/* Spacer for centering */}
@@ -413,19 +516,22 @@ export default function Home() {
           {/* Terminal Content */}
           <div
             ref={terminalRef}
-            className="bg-[#1e1e1e]/75 backdrop-blur-sm p-6 h-[500px] overflow-y-auto text-[#f5f5f5] font-mono text-sm leading-relaxed"
+            className="p-6 h-[500px] overflow-y-auto font-mono text-sm leading-relaxed"
+            style={{
+              background: '#ffffff',
+              color: '#000000'
+            }}
             onClick={() => inputRef.current?.focus()}
           >
             {history.map((entry, index) => (
               <div
                 key={index}
-                className={`mb-0.5 ${
-                  entry.type === 'prompt'
-                    ? 'text-[#34d399] font-semibold mt-2'
-                    : entry.type === 'command'
-                    ? 'text-[#f5f5f5]'
-                    : 'text-[#d1d5db]'
-                }`}
+                className={`mb-0.5`}
+                style={{
+                  color: entry.type === 'prompt' ? '#0066cc' : '#000000',
+                  fontWeight: entry.type === 'prompt' ? 'bold' : 'normal',
+                  marginTop: entry.type === 'prompt' ? '8px' : '0'
+                }}
               >
                 {entry.content}
               </div>
@@ -436,38 +542,38 @@ export default function Home() {
               <div className="my-2">
                 {workflowStep === 'project-type' && (
                   <>
-                    <div className={`py-1 ${selectedIndex === 0 ? 'text-[#34d399]' : 'text-[#d1d5db]'}`}>
+                    <div className="py-1" style={{ color: selectedIndex === 0 ? '#0066cc' : '#000000' }}>
                       <span className="mr-2">1.</span>
                       <span className="font-semibold">Starting something new</span>
-                      <div className="ml-6 text-[#6b7280] text-xs">Create a fresh sandbox from scratch</div>
+                      <div className="ml-6 text-xs" style={{ color: '#666666' }}>Create a fresh sandbox from scratch</div>
                     </div>
-                    <div className={`py-1 ${selectedIndex === 1 ? 'text-[#34d399]' : 'text-[#d1d5db]'}`}>
+                    <div className="py-1" style={{ color: selectedIndex === 1 ? '#0066cc' : '#000000' }}>
                       <span className="mr-2">2.</span>
                       <span className="font-semibold">Continuing on something</span>
-                      <div className="ml-6 text-[#6b7280] text-xs">Resume work on an existing project</div>
+                      <div className="ml-6 text-xs" style={{ color: '#666666' }}>Resume work on an existing project</div>
                     </div>
                   </>
                 )}
                 {workflowStep === 'experience-type' && (
                   <>
-                    <div className={`py-1 ${selectedIndex === 0 ? 'text-[#34d399]' : 'text-[#d1d5db]'}`}>
+                    <div className="py-1" style={{ color: selectedIndex === 0 ? '#0066cc' : '#000000' }}>
                       <span className="mr-2">1.</span>
                       <span className="font-semibold">Brand experience</span>
-                      <div className="ml-6 text-[#6b7280] text-xs">Work on brand-facing features and pages</div>
+                      <div className="ml-6 text-xs" style={{ color: '#666666' }}>Work on brand-facing features and pages</div>
                     </div>
-                    <div className={`py-1 ${selectedIndex === 1 ? 'text-[#34d399]' : 'text-[#d1d5db]'}`}>
+                    <div className="py-1" style={{ color: selectedIndex === 1 ? '#0066cc' : '#000000' }}>
                       <span className="mr-2">2.</span>
                       <span className="font-semibold">Retail experience</span>
-                      <div className="ml-6 text-[#6b7280] text-xs">Build retailer-focused functionality</div>
+                      <div className="ml-6 text-xs" style={{ color: '#666666' }}>Build retailer-focused functionality</div>
                     </div>
-                    <div className={`py-1 ${selectedIndex === 2 ? 'text-[#34d399]' : 'text-[#d1d5db]'}`}>
+                    <div className="py-1" style={{ color: selectedIndex === 2 ? '#0066cc' : '#000000' }}>
                       <span className="mr-2">3.</span>
                       <span className="font-semibold">Logged-out experience</span>
-                      <div className="ml-6 text-[#6b7280] text-xs">Create public-facing pages and features</div>
+                      <div className="ml-6 text-xs" style={{ color: '#666666' }}>Create public-facing pages and features</div>
                     </div>
                   </>
                 )}
-                <div className="mt-3 text-[#6b7280] text-xs">
+                <div className="mt-3 text-xs" style={{ color: '#666666' }}>
                   Enter to select · Tab/Arrow keys to navigate · Esc to cancel
                 </div>
               </div>
@@ -476,11 +582,11 @@ export default function Home() {
             {/* Show loading spinner */}
             {workflowStep === 'loading' && (
               <div className="my-1">
-                <div className="flex items-center gap-2 text-[#34d399]">
+                <div className="flex items-center gap-2" style={{ color: '#0066cc' }}>
                   <span className="text-lg">{spinnerFrames[loadingFrame]}</span>
                   <span>Setting up your environment. This will likely take 3-5 minutes.</span>
                 </div>
-                <div className="text-[#9ca3af] ml-6 mt-1">
+                <div className="ml-6 mt-1" style={{ color: '#666666' }}>
                   Go grab a coffee and we will ping you when it is ready.
                 </div>
               </div>
@@ -489,10 +595,10 @@ export default function Home() {
             <form onSubmit={handleSubmit} className="flex items-center mt-1">
               {workflowStep === 'idle' && (
                 <>
-                  <span className="text-[#34d399] mr-2">{getPromptText()}</span>
+                  <span className="mr-2" style={{ color: '#0066cc' }}>{getPromptText()}</span>
                   <div className="flex items-center relative">
-                    <span className="text-[#f5f5f5] whitespace-pre">{currentInput}</span>
-                    <span className="inline-block w-2 h-4 bg-[#f5f5f5]"></span>
+                    <span className="whitespace-pre" style={{ color: '#000000' }}>{currentInput}</span>
+                    <span className="inline-block w-2 h-4" style={{ backgroundColor: '#000000' }}></span>
                     <input
                       ref={inputRef}
                       type="text"
@@ -537,25 +643,69 @@ export default function Home() {
         <div className="absolute inset-0 flex items-center justify-center gap-4 px-8 py-16 transition-opacity duration-500 opacity-0 animate-fadeIn">
           {/* Browser Window - Left (with invisible placeholder when not shown) */}
           {showBrowser ? (
-            <div className="w-[50%] h-3/4 bg-[#f5f5f5] rounded-lg shadow-2xl overflow-hidden flex flex-col transition-opacity duration-700 opacity-0 animate-fadeIn">
-            {/* Title Bar */}
-            <div className="bg-[#e8e8e8] px-4 py-2.5 flex items-center border-b border-[#d1d1d1]">
-              {/* Traffic Light Buttons */}
+            <div className="w-[50%] h-3/4 rounded-xl shadow-2xl overflow-hidden flex flex-col transition-opacity duration-700 opacity-0 animate-fadeIn" style={{
+              background: '#f5f5f5',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3)'
+            }}>
+            {/* Title Bar - Aqua Style */}
+            <div className="px-4 py-2.5 flex items-center" style={{
+              background: `
+                linear-gradient(
+                  0deg,
+                  transparent 0%, transparent 14%,
+                  rgba(160,170,180,0.5) 14%, rgba(160,170,180,0.5) 15%,
+                  transparent 15%, transparent 28%,
+                  rgba(160,170,180,0.5) 28%, rgba(160,170,180,0.5) 29%,
+                  transparent 29%, transparent 42%,
+                  rgba(160,170,180,0.5) 42%, rgba(160,170,180,0.5) 43%,
+                  transparent 43%, transparent 57%,
+                  rgba(160,170,180,0.5) 57%, rgba(160,170,180,0.5) 58%,
+                  transparent 58%, transparent 71%,
+                  rgba(160,170,180,0.5) 71%, rgba(160,170,180,0.5) 72%,
+                  transparent 72%, transparent 85%,
+                  rgba(160,170,180,0.5) 85%, rgba(160,170,180,0.5) 86%,
+                  transparent 86%, transparent 100%
+                ),
+                linear-gradient(180deg, #f5f6f7 0%, #e8eaec 50%, #dfe1e4 100%)
+              `,
+              borderBottom: '1px solid #b0b5ba',
+              boxShadow: '0 1px 0 rgba(255,255,255,0.8) inset, 0 1px 2px rgba(0,0,0,0.1)'
+            }}>
+              {/* Traffic Light Buttons - Candy Style */}
               <div className="flex gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
-                <div className="w-3 h-3 rounded-full bg-[#febc2e]"></div>
-                <div className="w-3 h-3 rounded-full bg-[#28c840]"></div>
+                <div className="w-3 h-3 rounded-full" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #ff6961, #ec5f59 45%, #d84942 65%, #c73d38)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(180,60,60,0.5)'
+                }}></div>
+                <div className="w-3 h-3 rounded-full" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #ffc52f, #ffbe2e 45%, #f0ac1e 65%, #e09e15)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(200,150,40,0.5)'
+                }}></div>
+                <div className="w-3 h-3 rounded-full" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #2dd04a, #28ca42 45%, #23b83a 65%, #1fa633)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(40,160,50,0.5)'
+                }}></div>
               </div>
               {/* Window Title */}
-              <div className="flex-1 text-center text-[#5a5a5a] text-sm font-medium">
+              <div className="flex-1 text-center text-sm font-medium" style={{
+                color: '#2a2a2a',
+                textShadow: '0 1px 0 rgba(255,255,255,0.9)',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Lucida Grande", sans-serif'
+              }}>
                 Safari
               </div>
               {/* Spacer */}
               <div className="w-[60px]"></div>
             </div>
 
-            {/* Address Bar */}
-            <div className="bg-white px-4 py-2 border-b border-[#d1d1d1] flex items-center gap-2">
+            {/* Address Bar - Aqua Style */}
+            <div className="px-4 py-2 flex items-center gap-2" style={{
+              background: 'linear-gradient(180deg, #e8e8e8 0%, #d8d8d8 100%)',
+              borderBottom: '1px solid #c0c0c0'
+            }}>
               {/* Navigation Buttons */}
               <div className="flex gap-1">
                 <div className="w-7 h-7 rounded flex items-center justify-center text-[#5a5a5a] hover:bg-gray-100">
@@ -569,8 +719,14 @@ export default function Home() {
                   </svg>
                 </div>
               </div>
-              {/* URL Bar */}
-              <div className="flex-1 bg-[#f5f5f5] rounded-md px-3 py-1.5 text-sm text-[#5a5a5a]">
+              {/* URL Bar - Classic Aqua Style */}
+              <div className="flex-1 px-3 py-1.5 text-sm" style={{
+                background: 'linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%)',
+                border: '1px solid #a0a0a0',
+                borderRadius: '4px',
+                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1)',
+                color: '#2a2a2a'
+              }}>
                 vibe.faire.com/intrater-102125
               </div>
               {/* Refresh */}
@@ -595,17 +751,57 @@ export default function Home() {
           )}
 
           {/* Cursor Window - Right (always 50% width, same as browser) */}
-          <div className="w-[50%] h-3/4 bg-[#1e1e1e] rounded-lg shadow-2xl overflow-hidden flex flex-col">
-            {/* Title Bar */}
-            <div className="bg-[#323232] px-4 py-2.5 flex items-center border-b border-[#1e1e1e]">
-              {/* Traffic Light Buttons */}
+          <div className="w-[50%] h-3/4 bg-[#1e1e1e] rounded-xl shadow-2xl overflow-hidden flex flex-col" style={{
+            boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3)'
+          }}>
+            {/* Title Bar - Dark Aqua Style */}
+            <div className="px-4 py-2.5 flex items-center" style={{
+              background: `
+                linear-gradient(
+                  0deg,
+                  transparent 0%, transparent 14%,
+                  rgba(80,85,90,0.5) 14%, rgba(80,85,90,0.5) 15%,
+                  transparent 15%, transparent 28%,
+                  rgba(80,85,90,0.5) 28%, rgba(80,85,90,0.5) 29%,
+                  transparent 29%, transparent 42%,
+                  rgba(80,85,90,0.5) 42%, rgba(80,85,90,0.5) 43%,
+                  transparent 43%, transparent 57%,
+                  rgba(80,85,90,0.5) 57%, rgba(80,85,90,0.5) 58%,
+                  transparent 58%, transparent 71%,
+                  rgba(80,85,90,0.5) 71%, rgba(80,85,90,0.5) 72%,
+                  transparent 72%, transparent 85%,
+                  rgba(80,85,90,0.5) 85%, rgba(80,85,90,0.5) 86%,
+                  transparent 86%, transparent 100%
+                ),
+                linear-gradient(180deg, #4a4d50 0%, #3a3d40 50%, #2d3033 100%)
+              `,
+              borderBottom: '1px solid #1a1a1a',
+              boxShadow: '0 1px 0 rgba(255,255,255,0.05) inset, 0 1px 2px rgba(0,0,0,0.3)'
+            }}>
+              {/* Traffic Light Buttons - Candy Style */}
               <div className="flex gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
-                <div className="w-3 h-3 rounded-full bg-[#febc2e]"></div>
-                <div className="w-3 h-3 rounded-full bg-[#28c840]"></div>
+                <div className="w-3 h-3 rounded-full" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #ff6961, #ec5f59 45%, #d84942 65%, #c73d38)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(180,60,60,0.5)'
+                }}></div>
+                <div className="w-3 h-3 rounded-full" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #ffc52f, #ffbe2e 45%, #f0ac1e 65%, #e09e15)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(200,150,40,0.5)'
+                }}></div>
+                <div className="w-3 h-3 rounded-full" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #2dd04a, #28ca42 45%, #23b83a 65%, #1fa633)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(40,160,50,0.5)'
+                }}></div>
               </div>
               {/* Window Title */}
-              <div className="flex-1 text-center text-[#b8b8b8] text-sm font-medium">
+              <div className="flex-1 text-center text-sm font-medium" style={{
+                color: '#c0c0c0',
+                textShadow: '0 1px 0 rgba(0,0,0,0.8)',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Lucida Grande", sans-serif'
+              }}>
                 Cursor
               </div>
               {/* Spacer */}
@@ -986,17 +1182,57 @@ export default function Home() {
       {/* Slack Window Overlay */}
       {showSlackWindow && (
         <div className="absolute inset-0 z-[60] flex items-center justify-center p-8 animate-fadeIn">
-          <div className="w-full max-w-6xl h-[85vh] bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col">
-            {/* Title Bar */}
-            <div className="bg-[#350d36] px-4 py-2.5 flex items-center">
-              {/* Traffic Light Buttons */}
+          <div className="w-full max-w-6xl h-[85vh] bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col" style={{
+            boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3)'
+          }}>
+            {/* Title Bar - Purple Aqua Style */}
+            <div className="px-4 py-2.5 flex items-center" style={{
+              background: `
+                linear-gradient(
+                  0deg,
+                  transparent 0%, transparent 14%,
+                  rgba(90,40,95,0.5) 14%, rgba(90,40,95,0.5) 15%,
+                  transparent 15%, transparent 28%,
+                  rgba(90,40,95,0.5) 28%, rgba(90,40,95,0.5) 29%,
+                  transparent 29%, transparent 42%,
+                  rgba(90,40,95,0.5) 42%, rgba(90,40,95,0.5) 43%,
+                  transparent 43%, transparent 57%,
+                  rgba(90,40,95,0.5) 57%, rgba(90,40,95,0.5) 58%,
+                  transparent 58%, transparent 71%,
+                  rgba(90,40,95,0.5) 71%, rgba(90,40,95,0.5) 72%,
+                  transparent 72%, transparent 85%,
+                  rgba(90,40,95,0.5) 85%, rgba(90,40,95,0.5) 86%,
+                  transparent 86%, transparent 100%
+                ),
+                linear-gradient(180deg, #4a1d4f 0%, #3d1742 50%, #350d36 100%)
+              `,
+              borderBottom: '1px solid #2a0a2e',
+              boxShadow: '0 1px 0 rgba(255,255,255,0.05) inset, 0 1px 2px rgba(0,0,0,0.3)'
+            }}>
+              {/* Traffic Light Buttons - Candy Style */}
               <div className="flex gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
-                <div className="w-3 h-3 rounded-full bg-[#febc2e]"></div>
-                <div className="w-3 h-3 rounded-full bg-[#28c840]"></div>
+                <div className="w-3 h-3 rounded-full" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #ff6961, #ec5f59 45%, #d84942 65%, #c73d38)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(180,60,60,0.5)'
+                }}></div>
+                <div className="w-3 h-3 rounded-full" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #ffc52f, #ffbe2e 45%, #f0ac1e 65%, #e09e15)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(200,150,40,0.5)'
+                }}></div>
+                <div className="w-3 h-3 rounded-full" style={{
+                  background: 'radial-gradient(circle at 35% 35%, #2dd04a, #28ca42 45%, #23b83a 65%, #1fa633)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)',
+                  border: '0.5px solid rgba(40,160,50,0.5)'
+                }}></div>
               </div>
               {/* Workspace Name */}
-              <div className="flex-1 text-center text-white text-sm font-semibold">
+              <div className="flex-1 text-center text-sm font-medium" style={{
+                color: '#c0c0c0',
+                textShadow: '0 1px 0 rgba(0,0,0,0.8)',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Lucida Grande", sans-serif'
+              }}>
                 Faire
               </div>
               {/* Spacer */}
