@@ -257,10 +257,10 @@ export default function Home() {
       </div>
 
       {/* Desktop Icons */}
-      <div className="absolute top-16 right-8 space-y-4">
-        {/* Documents Folder - Reset Everything */}
+      <div className="absolute top-16 right-8 space-y-4 z-0">
+        {/* Photos Folder - Back to Blank Desktop */}
         <div
-          className="flex flex-col items-center gap-2 text-white cursor-pointer hover:bg-white/20 p-2 rounded group z-50 relative"
+          className="flex flex-col items-center gap-2 text-white cursor-pointer hover:bg-white/20 p-2 rounded group relative"
           onClick={() => {
             setHistory([
               { type: 'output', content: 'Last login: Tue Oct 21 10:45:23 on ttys001' },
@@ -286,12 +286,43 @@ export default function Home() {
             <path d="M8 12c0-2.21 1.79-4 4-4h14l4 4h22c2.21 0 4 1.79 4 4v32c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V12z" fill="#60a5fa" />
             <path d="M8 20h48v28c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V20z" fill="#3b82f6" />
           </svg>
+          <div className="text-xs font-medium drop-shadow-lg">Photos</div>
+        </div>
+
+        {/* Documents Folder - Open Terminal Window */}
+        <div
+          className="flex flex-col items-center gap-2 text-white cursor-pointer hover:bg-white/20 p-2 rounded group relative"
+          onClick={() => {
+            setHistory([
+              { type: 'output', content: 'Last login: Tue Oct 21 10:45:23 on ttys001' },
+              { type: 'output', content: '' },
+            ]);
+            setCurrentInput('');
+            setWorkflowStep('idle');
+            setSelectedIndex(0);
+            setLoadingFrame(0);
+            setShowAppWindows(false);
+            setTerminalMinimized(false);
+            setCursorMessages([]);
+            setBrowserScreenshot('faire-screenshot.png');
+            setShowShareUrl(false);
+            setCopySuccess(false);
+            setSandboxCreated(false);
+            setShowBrowser(false);
+            setSpotlightOpen(false);
+            setSpotlightQuery('');
+          }}
+        >
+          <svg className="w-16 h-16" viewBox="0 0 64 64" fill="currentColor">
+            <path d="M8 12c0-2.21 1.79-4 4-4h14l4 4h22c2.21 0 4 1.79 4 4v32c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V12z" fill="#60a5fa" />
+            <path d="M8 20h48v28c0 2.21-1.79 4-4 4H12c-2.21 0-4-1.79-4-4V20z" fill="#3b82f6" />
+          </svg>
           <div className="text-xs font-medium drop-shadow-lg">Documents</div>
         </div>
 
-        {/* Projects Folder - Skip to Windows View */}
+        {/* Projects Folder - Open Cursor Window */}
         <div
-          className="flex flex-col items-center gap-2 text-white cursor-pointer hover:bg-white/20 p-2 rounded group"
+          className="flex flex-col items-center gap-2 text-white cursor-pointer hover:bg-white/20 p-2 rounded group relative"
           onClick={() => {
             setTerminalMinimized(true);
             setShowAppWindows(true);
