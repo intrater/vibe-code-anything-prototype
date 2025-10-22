@@ -20,7 +20,7 @@ export default function Home() {
   const [terminalMinimized, setTerminalMinimized] = useState(true); // Start with terminal hidden
   const [cursorInput, setCursorInput] = useState('');
   const [cursorMessages, setCursorMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
-  const [browserScreenshot, setBrowserScreenshot] = useState('faire-screenshot.png');
+  const [browserScreenshot, setBrowserScreenshot] = useState('faire-screenshot.jpg');
   const [showShareUrl, setShowShareUrl] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
   const [sandboxCreated, setSandboxCreated] = useState(false);
@@ -90,6 +90,14 @@ export default function Home() {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }
   }, [history]);
+
+  // Auto-adjust textarea height when cursorInput changes (including pre-filled text)
+  useEffect(() => {
+    if (cursorInputRef.current) {
+      cursorInputRef.current.style.height = 'auto';
+      cursorInputRef.current.style.height = cursorInputRef.current.scrollHeight + 'px';
+    }
+  }, [cursorInput]);
 
   // Spinner animation
   useEffect(() => {
@@ -236,15 +244,18 @@ export default function Home() {
             content: 'Sure I will update the sandbox for you.'
           }]);
           setCustomizeSandboxMode(false);
+
+          // Change browser screenshot after AI responds
+          setBrowserScreenshot('Homepage2.jpg');
         } else {
-          // Handle normal mode (making text larger)
+          // Handle normal mode (adding shortcut cards)
           setCursorMessages(prev => [...prev, {
             role: 'assistant',
-            content: 'I\'ll help you make the "Welcome back, Supper Club" text larger. Let me update the CSS for that heading.'
+            content: 'No problem. I will add in a row of shortcut cards to the top of the home screen for you'
           }]);
 
           // Change browser screenshot after AI responds
-          setBrowserScreenshot('faire-screenshot2.png');
+          setBrowserScreenshot('faire-screenshot2.jpg');
         }
       }, 1000);
     }
@@ -740,9 +751,11 @@ export default function Home() {
             {/* Browser Content */}
             <div className="flex-1 bg-white overflow-hidden">
               <img
+                key={browserScreenshot}
                 src={`/${browserScreenshot}`}
                 alt="Faire homepage"
-                className="w-full h-full object-cover object-left-top"
+                className="w-full h-full object-cover object-left-top transition-opacity duration-500"
+                style={{ animation: 'fadeIn 500ms ease-in' }}
               />
             </div>
           </div>
@@ -919,7 +932,7 @@ export default function Home() {
                             e.preventDefault();
                             // Clear chat and pre-fill with customize message
                             setCursorMessages([]);
-                            setCursorInput('I want to customize this sandbox...');
+                            setCursorInput('I want to customize the sandbox using the faire-cli MCP server...');
                             setCustomizeSandboxMode(true);
                             // Focus the chat input
                             setTimeout(() => cursorInputRef.current?.focus(), 100);
@@ -969,7 +982,14 @@ export default function Home() {
                         <textarea
                           ref={cursorInputRef}
                           value={cursorInput}
-                          onChange={(e) => setCursorInput(e.target.value)}
+                          onChange={(e) => {
+                            setCursorInput(e.target.value);
+                            // Auto-grow textarea
+                            if (cursorInputRef.current) {
+                              cursorInputRef.current.style.height = 'auto';
+                              cursorInputRef.current.style.height = cursorInputRef.current.scrollHeight + 'px';
+                            }
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                               e.preventDefault();
@@ -978,6 +998,7 @@ export default function Home() {
                           }}
                           placeholder="Plan, search, build anything"
                           className="w-full bg-transparent outline-none text-[#cccccc] text-base resize-none placeholder:text-[#6e6e6e]"
+                          style={{ minHeight: '24px', maxHeight: '200px', overflowY: 'auto' }}
                           rows={1}
                         />
                       </div>
