@@ -30,6 +30,7 @@ export default function Home() {
   const [showSlackWindow, setShowSlackWindow] = useState(false);
   const [slackMessage, setSlackMessage] = useState('');
   const [showSlackUrl, setShowSlackUrl] = useState(false);
+  const [slackMessageSent, setSlackMessageSent] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const cursorInputRef = useRef<HTMLTextAreaElement>(null);
@@ -1100,6 +1101,37 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
+
+                  {/* User's sent message */}
+                  {slackMessageSent && (
+                    <div className="mb-3 hover:bg-gray-50 -mx-5 px-5 py-1 animate-fadeIn">
+                      <div className="flex gap-2">
+                        <div className="w-9 h-9 rounded bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                          J
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-baseline gap-2 mb-0.5">
+                            <span className="font-black text-[15px] text-[#1d1c1d]">John Intrater</span>
+                            <span className="text-xs text-gray-600">10:25 AM</span>
+                          </div>
+                          <div className="text-[15px] text-[#1d1c1d] leading-snug mb-2">
+                            {slackMessage}
+                          </div>
+                          <div className="flex items-start gap-2 p-3 bg-[#f8f8f8] border border-gray-200 rounded max-w-md">
+                            <div className="flex-shrink-0 mt-0.5">
+                              <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                              </svg>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-semibold text-[#1264a3] truncate">vibe.faire.com</div>
+                              <div className="text-xs text-gray-600 truncate">intrater-102125</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Message Input Area */}
@@ -1113,8 +1145,12 @@ export default function Home() {
                         onKeyDown={(e) => {
                           if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault();
-                            if (slackMessage.trim()) {
+                            if (!showSlackUrl && slackMessage.trim()) {
+                              // First Enter: show URL
                               setShowSlackUrl(true);
+                            } else if (showSlackUrl && slackMessage.trim()) {
+                              // Second Enter: send message
+                              setSlackMessageSent(true);
                             }
                           }
                         }}
@@ -1130,6 +1166,7 @@ export default function Home() {
                           target.style.height = 'auto';
                           target.style.height = Math.min(target.scrollHeight, 200) + 'px';
                         }}
+                        disabled={slackMessageSent}
                       />
                       {showSlackUrl && (
                         <div className="flex items-start gap-2 p-3 mt-2 bg-[#f8f8f8] border border-gray-200 rounded hover:bg-gray-100 transition-colors">
@@ -1163,7 +1200,19 @@ export default function Home() {
                           </svg>
                         </button>
                       </div>
-                      <button className="bg-[#007a5a] hover:bg-[#148567] text-white px-4 py-1.5 rounded font-semibold text-[13px] shadow-sm flex items-center gap-1.5">
+                      <button
+                        onClick={() => {
+                          if (slackMessage.trim() && showSlackUrl && !slackMessageSent) {
+                            setSlackMessageSent(true);
+                          }
+                        }}
+                        disabled={!showSlackUrl || slackMessageSent}
+                        className={`px-4 py-1.5 rounded font-semibold text-[13px] shadow-sm flex items-center gap-1.5 transition-colors ${
+                          showSlackUrl && !slackMessageSent
+                            ? 'bg-[#007a5a] hover:bg-[#148567] text-white cursor-pointer'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        }`}
+                      >
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                         </svg>
